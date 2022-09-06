@@ -386,10 +386,11 @@ canvas.onmousemove = (evt) => {
 
 
 const urlImages = readJson("imgs")
+console.log(urlImages)
 if(urlImages != null && urlImages instanceof Array){
     for (let i = 0; i < urlImages.length; i++) {
         let e = urlImages[i];
-        // console.log(e)
+        console.log(e)
         let img = new Image();
         img.src = e;
         img.onload = () => {

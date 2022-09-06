@@ -11,6 +11,7 @@ function readVarQuotes(name){
 
 function readJson(name){
     name = readVarQuotes(name)
+    console.log(name)
     try{
     return JSON.parse(name)
     } catch{
