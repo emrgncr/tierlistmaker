@@ -9,10 +9,31 @@ var maxsize = new Location(Tier.rowHeight - 7, Tier.rowHeight - 7);
 var ghostcard = new Card(new Location(0,0), new Location(0,0), new Image());
 
 const wpadding = 20;
+const tiersPresetup = readJson("tiers")
 
 var cards = [];
-var tiers = [new Tier('s','yellow'), new Tier('a','lime'), new Tier('b','green'), new Tier('c','orange'),
-        new Tier('holdout','darkgray')];
+var tiers = []
+if(tiersPresetup != undefined && tiersPresetup instanceof Array){
+    //setup tiers by predefined setup
+    for(let i = 0; i<tiersPresetup.length; i++){
+        let stp = tiersPresetup[i];
+        try{
+         if(stp.n != "holdout")
+            tiers.push(new Tier(stp.n, "#"+stp.c))   
+        }catch{
+            alert("Girdiğiniz veride hatalar var!")
+        }
+    }
+
+    tiers.push(new Tier('holdout','darkgray'))
+}else{
+    var tiers = [new Tier('s','yellow'), new Tier('a','lime'), new Tier('b','green'), new Tier('c','orange'),
+    new Tier('holdout','darkgray')];
+}
+
+
+
+
 var holdoutTier = tiers[tiers.length - 1];
 var draggingCard = null;
 
@@ -282,7 +303,7 @@ canvas.onmouseup = (evt) => {
         if(onTier != null){
             let tierloc = getTierLocation(tierind)
             let tindex = onTier.getLocationIndex(tierWidth, mousePos.diff(tierloc));
-            console.log('tindex', tindex, 'len', onTier.cards.length);
+            // console.log('tindex', tindex, 'len', onTier.cards.length);
             if(tindex == -1 || tindex == onTier.cards.length)
                 onTier.cards.push(draggingCard);
             else
@@ -321,7 +342,7 @@ canvas.onmousemove = (evt) => {
         if(onTier != null){
             let tierloc = getTierLocation(tierind)
             let tindex = onTier.getLocationIndex(tierWidth, mousePos.diff(tierloc));
-            console.log(tindex)
+            // console.log(tindex)
             ghostcard.size = draggingCard.size;
             let gi = onTier.cards.indexOf(ghostcard);
             if(gi == -1){
@@ -362,3 +383,17 @@ canvas.onmousemove = (evt) => {
     canvasSetup();
 }
 
+
+
+const urlImages = readJson("imgs")
+if(urlImages != null && urlImages instanceof Array){
+    for (let i = 0; i < urlImages.length; i++) {
+        let e = urlImages[i];
+        // console.log(e)
+        let img = new Image();
+        img.src = e;
+        img.onload = () => {
+        spawnCard(img)
+        }
+    }
+}
